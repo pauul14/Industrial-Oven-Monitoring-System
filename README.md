@@ -92,9 +92,3 @@ RIGHTS.md                   Permission scope and third-party rights
 Start with the recovered source and design notes. There is no `.project` or `.projectarchive`, recovered visualization definition, alarm configuration export, library lock, task-period record, or build output. The exact CODESYS version and original settings are unknown.
 
 A future reconstruction would need to restore the CODESYS application, declarations and program body, visualization bindings, alarm definitions, libraries, and task settings, then address the listed code issues and validate in simulation. That would be new work and should be tracked separately from this archive. The recovered listing has **not been compiled or executed** as part of this recovery and is not suitable for operating a real oven.
-
-## Team and rights
-
-This was a **joint project by Kent Alia and John Paul Maluya**. The published report does not identify individual task ownership, so this repository does not assign programming, HMI, or documentation work to either person individually.
-
-Recovered code and images are reproduced with John Paul's confirmation that Kent does not object to their inclusion. This is permission for the portfolio publication, not an open-source license or a claim of rights over third-party interface artwork. See [credits](CREDITS.md) and [rights](RIGHTS.md).
