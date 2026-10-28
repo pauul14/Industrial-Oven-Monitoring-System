@@ -1,0 +1,156 @@
+PROGRAM PLC_PRG
+VAR
+    (* ========================================== *)
+    (* HMI VARIABLES                *)
+    (* ========================================== *)
+    PowerSwitch    : BOOL;          (* Main System Power *)
+    Setpoint       : REAL := 250.0; (* Target Temperature Control *)
+    OringLimit     : REAL := 310.0; (* Safety Configuration Limit *)
+    AckAlarm       : BOOL;          (* Alarm Acknowledge Button *)
+    BypassButton   : BOOL;          (* Maintenance Bypass Toggle *)
+    (* ========================================== *)
+    (* SYSTEM STATUS & IO              *)
+    (* ========================================== *)
+    CurrentTemp    : REAL := 75.0;  (* Simulated Oven Temperature *)
+    HeaterOn       : BOOL;          (* Heater Output *)
+    DoorLocked     : BOOL;          (* Door Lock Solenoid *)
+    SafeToOpen     : BOOL;          (* Safety Signal *)
+    (* ========================================== *)
+    (* LED INDICATORS                *)
+    (* ========================================== *)
+    LedPower       : BOOL;          (* Blue: Power Active *)
+    LedRamping     : BOOL;          (* Yellow: Heating in Progress *)
+    LedAtTemp      : BOOL;          (* Green: Target Temp Reached *)
+    LedLocked      : BOOL;          (* Red: Door Locked *)
+    LedUnlocked    : BOOL;          (* Green: Door Unlocked *)
+    (* ========================================== *)
+    (* ALARM TRIGGERS                *)
+    (* ========================================== *)
+    AlarmOring     : BOOL;          (* Warning: Approaching Limit *)
+    AlarmShutdown  : BOOL;          (* Error: Critical Limit Exceeded *)
+    AlarmTooHotEntry : BOOL;        (* Warning: Unsafe Internal Temp *)
+    (* ========================================== *)
+    (* SIMULATION                  *)
+    (* ========================================== *)
+    Simulation     : BOOL := TRUE;  (* Physics Simulation Enable *)
+END_VAR 
+(* 1. UPDATE SYSTEM INDICATORS *)
+LedPower := PowerSwitch;
+(* --------------------------------------------------------- *)
+(* 2. SAFETY & LIMIT MONITORING                              *)
+(* --------------------------------------------------------- *)
+(* Critical Shutdown Limit *)
+IF CurrentTemp >= 320.0 THEN
+    AlarmShutdown := TRUE;
+    PowerSwitch := FALSE; (* Force System Stop *)
+    HeaterOn := FALSE;
+(* Warning Limit *)
+ELSIF CurrentTemp >= 300.0 THEN
+    AlarmOring := TRUE;     
+ELSE
+    (* Auto-Reset Hysteresis (Reset if < 280.0) *)
+    IF CurrentTemp < 280.0 THEN
+        AlarmOring := FALSE;
+        AlarmShutdown := FALSE;
+    END_IF
+END_IF
+(* --------------------------------------------------------- *)
+(* 3. PROCESS CONTROL                                        *)
+(* --------------------------------------------------------- *)
+IF PowerSwitch AND NOT AlarmShutdown THEN
+    (* --- DOOR INTERLOCK & BYPASS LOGIC --- *)
+    (* Standard: Door locked while running *)
+    (* Bypass: Unlock enabled only if "At Temp" AND Bypass Toggled ON *)
+    IF LedAtTemp AND BypassButton THEN
+        DoorLocked := FALSE;       (* Unlock Door *)
+        AlarmTooHotEntry := TRUE;  (* Force Safety Warning *)
+    ELSE
+        DoorLocked := TRUE;        (* Lock Door *)
+    END_IF
+    SafeToOpen := FALSE;
+    (* --- LOCK INDICATORS --- *)
+    IF DoorLocked THEN
+        LedLocked := TRUE;
+        LedUnlocked := FALSE;
+    ELSE
+        LedLocked := FALSE;
+        LedUnlocked := TRUE;
+    END_IF
+    (* --- HEATER CONTROL --- *)
+    IF CurrentTemp < Setpoint THEN
+        HeaterOn := TRUE;
+    ELSE
+        HeaterOn := FALSE; 
+    END_IF
+    (* --- STATUS INDICATORS --- *)
+    LedRamping := TRUE;
+    (* At Temperature Window (+/- 5.0 deg) *)
+    IF CurrentTemp >= (Setpoint - 5.0) THEN
+        LedAtTemp := TRUE;       
+    ELSE
+        LedAtTemp := FALSE;    
+    END_IF
+ELSE
+    (* --- SYSTEM OFF / COOLING PHASE --- *)
+    HeaterOn := FALSE;
+    LedRamping := FALSE;
+    LedAtTemp := FALSE;
+    (* Safety Logic: Door unlocks only below safe limit (75.0) *)
+    IF CurrentTemp < 75.0 THEN
+        SafeToOpen := TRUE;    
+        DoorLocked := FALSE;  
+        (* Safe State LEDs *)
+        LedUnlocked := TRUE;
+        LedLocked := FALSE;
+    ELSE
+        SafeToOpen := FALSE;
+        DoorLocked := TRUE;    
+        (* Unsafe Cooling LEDs *)
+        LedUnlocked := FALSE;
+        LedLocked := TRUE;
+    END_IF
+END_IF
+(* --------------------------------------------------------- *)
+(* 4. ALARM MANAGEMENT & OVERRIDES                           *)
+(* --------------------------------------------------------- *)
+(* Button Auto-Reset *)
+IF AckAlarm THEN
+    AckAlarm := FALSE;
+END_IF
+(* Hot Surface Warning Logic *)
+IF CurrentTemp > 122.0 THEN 
+    AlarmTooHotEntry := TRUE;
+ELSE
+    (* Keep warning active if Bypass is forcing it *)
+    IF NOT (LedAtTemp AND BypassButton) THEN
+        AlarmTooHotEntry := FALSE;
+    END_IF
+END_IF;
+(* Dynamic Limit Check (Configurable O-Ring Limit) *)
+IF CurrentTemp > OringLimit THEN
+    AlarmOring := TRUE;
+END_IF;
+(* Indicator Correction: Disable Ramping if At Temp *)
+IF LedAtTemp THEN
+    LedRamping := FALSE;
+END_IF;
+(* Acknowledgment Logic: Clear Shutdown if Safe *)
+IF AckAlarm THEN
+    IF CurrentTemp < (OringLimit + 10.0) THEN
+        AlarmShutdown := FALSE;
+    END_IF
+    AckAlarm := FALSE; 
+END_IF;
+(* --------------------------------------------------------- *)
+(* 5. PHYSICS SIMULATION                                     *)
+(* --------------------------------------------------------- *)
+IF Simulation THEN
+    IF HeaterOn THEN
+        CurrentTemp := CurrentTemp + 0.5; (* Heating Rate *)
+    ELSE
+        (* Cooling Rate (Stops at Ambient 25.0) *)
+        IF CurrentTemp > 25.0 THEN 
+            CurrentTemp := CurrentTemp - 0.2; 
+        END_IF
+    END_IF
+END_IF

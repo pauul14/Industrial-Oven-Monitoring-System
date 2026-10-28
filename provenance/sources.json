@@ -1,0 +1,92 @@
+{
+  "schema_version": 1,
+  "recovery_date": "2026-10-28",
+  "recovery_timezone": "Asia/Shanghai",
+  "primary_source": "https://sites.google.com/g.msuiit.edu.ph/aliamaluyabca153finalproject/home?read_current=1",
+  "source_title": "Alia_Maluya_BCA153",
+  "report_date_as_published": "December 14, 2025",
+  "credited_team": [
+    "Kent Alia",
+    "John Paul Maluya"
+  ],
+  "permission_record": "John Paul authorized this public portfolio archive and stated that Kent does not mind republishing the group code and screenshots. This is owner-reported permission, not independent confirmation or an open-source license.",
+  "original_files_loss": "Owner reports loss of native project files after laptop reformat; not established by the public page.",
+  "inspection_snapshot": {
+    "sha256": "4945fa57bf4134d9a15ccbe048fcb0fd3dd3194fe8676bf2d928f614dbfbe872",
+    "included_in_repository": false,
+    "purpose": "Hash of locally saved public-page HTML, including Google Sites boilerplate; not a hash of the lost native project."
+  },
+  "artifacts": [
+    {
+      "file": "provenance/PLC_PRG.published.txt",
+      "source_page": "https://sites.google.com/g.msuiit.edu.ph/aliamaluyabca153finalproject/home?read_current=1",
+      "source_section": "FULL CODE",
+      "bytes": 6783,
+      "sha256": "1404586075a39a066771ea32cf2db16e3e020840aef9b4676edb31c26ef1a8cd",
+      "transformations": "Published HTML text extraction; entities decoded; block boundaries represented by LF; leading/trailing block whitespace trimmed; terminal LF added."
+    },
+    {
+      "file": "src/recovered/PLC_PRG.st",
+      "source_page": "https://sites.google.com/g.msuiit.edu.ph/aliamaluyabca153finalproject/home?read_current=1",
+      "source_section": "FULL CODE",
+      "bytes": 5758,
+      "sha256": "20fa7e2c7500b4144ab9a7bd17d4033869e374bf7ef597a1f6754f135325b558",
+      "transformations": "Derived from PLC_PRG.published.txt: nonbreaking spaces replaced with ASCII spaces; standalone hyphen-divider line removed; no logic or punctuation fixes."
+    },
+    {
+      "file": "assets/screenshots/figure-1-hmi.jpg",
+      "source_page": "https://sites.google.com/g.msuiit.edu.ph/aliamaluyabca153finalproject/home?read_current=1",
+      "source_section": "Figure 1",
+      "bytes": 75823,
+      "sha256": "3d25ab32093882ea6cc1590bfc3aa14712b65674f07f01561e433e1bce5cd370",
+      "transformations": "Downloaded from the rendered page; renamed only."
+    },
+    {
+      "file": "assets/screenshots/figure-2-alarms.jpg",
+      "source_page": "https://sites.google.com/g.msuiit.edu.ph/aliamaluyabca153finalproject/home?read_current=1",
+      "source_section": "Figure 2",
+      "bytes": 65690,
+      "sha256": "9c0c5104437e68aecd507b5213a591de8e79da459eff8209a756eddf82f13069",
+      "transformations": "Downloaded from the rendered page; renamed only."
+    },
+    {
+      "file": "assets/screenshots/figure-3-project-tree.png",
+      "source_page": "https://sites.google.com/g.msuiit.edu.ph/aliamaluyabca153finalproject/home?read_current=1",
+      "source_section": "Figure 3",
+      "bytes": 93216,
+      "sha256": "82ea5cafab759b22ecbbf80ac54beb0a462bde6a598c282329bc084e64cfe340",
+      "transformations": "Downloaded from the rendered page; renamed only."
+    },
+    {
+      "file": "assets/diagrams/figure-5-flowchart.png",
+      "source_page": "https://sites.google.com/g.msuiit.edu.ph/aliamaluyabca153finalproject/home?read_current=1",
+      "source_section": "Figure 5",
+      "bytes": 33916,
+      "sha256": "c41b41158fa93af5a9ce9f225343ba36c9c0d28647a1ad310a71c0901c4c7a86",
+      "transformations": "Downloaded from the rendered page; renamed only."
+    }
+  ],
+  "external_references": [
+    {
+      "source_section": "Figure 4",
+      "url": "https://www.youtube.com/watch?v=LV5riKL5myQ",
+      "status": "URL extracted from the public page embed; video not downloaded or independently reviewed."
+    }
+  ],
+  "new_editorial_files": [
+    "README.md",
+    "CREDITS.md",
+    "RIGHTS.md",
+    "docs/system-design.md",
+    "docs/code-review.md",
+    "docs/testing-and-results.md",
+    "docs/recovery.md"
+  ],
+  "verification_limits": [
+    "No native project recovered",
+    "No compilation or execution",
+    "No hardware testing",
+    "No independent proof that listing and screenshots represent the same build",
+    "No original widget-license inventory recovered"
+  ]
+}

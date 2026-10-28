@@ -1,0 +1,7 @@
+* text=auto
+*.md text eol=lf
+*.st text eol=lf
+*.json text eol=lf
+provenance/PLC_PRG.published.txt -text
+*.png binary
+*.jpg binary
