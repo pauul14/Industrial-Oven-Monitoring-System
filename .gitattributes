@@ -5,3 +5,5 @@
 provenance/PLC_PRG.published.txt -text
 *.png binary
 *.jpg binary
+# PLC Structured Text shares .st with Smalltalk; omit misleading language statistics.
+src/recovered/*.st linguist-detectable=false
